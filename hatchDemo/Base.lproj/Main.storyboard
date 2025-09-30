@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24128" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Sna-eK-tUV">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24063"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Scrolling-->
+        <scene sceneID="l9A-Ty-U8O">
+            <objects>
+                <viewController id="3ag-sm-wGw" customClass="ScrollingVC" customModule="hatchDemo" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Czw-2o-o0t">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ScrollingVC" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SYn-Su-Tcq">
+                                <rect key="frame" x="121" y="408" width="151" height="36"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="RIV-KX-jY3"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="SYn-Su-Tcq" firstAttribute="centerY" secondItem="Czw-2o-o0t" secondAttribute="centerY" id="DmV-bE-JfS"/>
+                            <constraint firstItem="SYn-Su-Tcq" firstAttribute="centerX" secondItem="Czw-2o-o0t" secondAttribute="centerX" id="WvI-Nd-Cek"/>
+                        </constraints>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Scrolling" image="list.number" catalog="system" id="LT2-en-uDh"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="cpO-sl-TOr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="367" y="298"/>
+        </scene>
+        <!--Editing-->
+        <scene sceneID="Kww-OK-DwW">
+            <objects>
+                <viewController id="eHK-xE-U8A" customClass="EditingVC" customModule="hatchDemo" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="gf5-Fz-TRU">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="EditingVC" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8ND-Cs-4o1">
+                                <rect key="frame" x="131.66666666666666" y="408" width="129.99999999999997" height="36"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="O1n-1U-nqr"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="8ND-Cs-4o1" firstAttribute="centerY" secondItem="gf5-Fz-TRU" secondAttribute="centerY" id="jRa-bT-6za"/>
+                            <constraint firstItem="8ND-Cs-4o1" firstAttribute="centerX" secondItem="gf5-Fz-TRU" secondAttribute="centerX" id="o2A-bF-Rwh"/>
+                        </constraints>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Editing" image="text.rectangle" catalog="system" id="Rac-i0-Hj4"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="fQh-92-sYn" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="367" y="-309"/>
+        </scene>
+        <!--Tab Bar Controller-->
+        <scene sceneID="NsP-Kc-Hnt">
+            <objects>
+                <tabBarController id="Sna-eK-tUV" sceneMemberID="viewController">
+                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="g56-FT-UKF">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="49"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="eHK-xE-U8A" kind="relationship" relationship="viewControllers" id="gwp-xw-hzo"/>
+                        <segue destination="3ag-sm-wGw" kind="relationship" relationship="viewControllers" id="Zsv-zZ-Sys"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="9pp-ZN-5Pq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-538" y="-6"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="list.number" catalog="system" width="128" height="97"/>
+        <image name="text.rectangle" catalog="system" width="128" height="93"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
