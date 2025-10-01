@@ -44,21 +44,29 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="EditingVC" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8ND-Cs-4o1">
-                                <rect key="frame" x="131.66666666666666" y="408" width="129.99999999999997" height="36"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EFd-In-4Bu" customClass="CBExpandingTextView" customModule="hatchDemo" customModuleProvider="target">
+                                <rect key="frame" x="76.666666666666686" y="411" width="240" height="30"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="30" id="KBL-xC-9Bk"/>
+                                    <constraint firstAttribute="width" constant="240" id="PE4-z9-7LC"/>
+                                </constraints>
+                                <color key="textColor" systemColor="labelColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences" keyboardType="alphabet" enablesReturnKeyAutomatically="YES"/>
+                            </textView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="O1n-1U-nqr"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="8ND-Cs-4o1" firstAttribute="centerY" secondItem="gf5-Fz-TRU" secondAttribute="centerY" id="jRa-bT-6za"/>
-                            <constraint firstItem="8ND-Cs-4o1" firstAttribute="centerX" secondItem="gf5-Fz-TRU" secondAttribute="centerX" id="o2A-bF-Rwh"/>
+                            <constraint firstItem="EFd-In-4Bu" firstAttribute="centerX" secondItem="gf5-Fz-TRU" secondAttribute="centerX" id="VqT-My-Ic1"/>
+                            <constraint firstItem="EFd-In-4Bu" firstAttribute="centerY" secondItem="gf5-Fz-TRU" secondAttribute="centerY" id="yqW-oa-St4"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Editing" image="text.rectangle" catalog="system" id="Rac-i0-Hj4"/>
+                    <connections>
+                        <outlet property="primaryTextField" destination="EFd-In-4Bu" id="65F-MK-Fsv"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fQh-92-sYn" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -86,6 +94,9 @@
     <resources>
         <image name="list.number" catalog="system" width="128" height="97"/>
         <image name="text.rectangle" catalog="system" width="128" height="93"/>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
