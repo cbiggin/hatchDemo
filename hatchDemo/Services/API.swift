@@ -5,9 +5,16 @@
 //  Created by Colin Biggin on 2025-10-01.
 //
 
+import Combine
 import Foundation
 
 let blah = "https://cdn.dev.airxp.app/AgentVideos-HLS-Progressive/manifest.json"
+
+public enum APIStatus {
+	case notStarted
+	case downloading
+	case success
+}
 
 public struct APIServerError: Error, CustomStringConvertible {
 
@@ -75,8 +82,10 @@ public struct APIServerError: Error, CustomStringConvertible {
 // MARK: -
 public class API {
 
+	public var videoStatus: CurrentValueSubject<APIStatus, Never> = .init(.notStarted)
+	public var videoUrls: CurrentValueSubject<[String], Never> = .init([])
+
 	public private(set) var urlString: String = ""
-	public private(set) var videoUrls: [String] = []
 
 	// MARK: private variables
 	private var session: URLSession?
@@ -87,22 +96,23 @@ public class API {
 	}
 
 	deinit {
-		videoUrls.removeAll()
+		videoUrls.value.removeAll()
 	}
 
 	public func reset() {
-		videoUrls.removeAll()
+		videoUrls.value.removeAll()
 	}
 
 	public func downloadManifest(_ url: String) async throws -> [String] {
 
 		// have we already download it? if so, just return
-		guard videoUrls.isEmpty else { return videoUrls }
+		guard videoUrls.value.isEmpty else { return videoUrls.value }
 
 		guard let session else { throw APIServerError(kind: .invalidURLSession) }
 		guard let manifestURL = URL(string: url) else { throw APIServerError(kind: .invalidURL) }
 
 		do {
+			videoStatus.send(.downloading)
 			let (data, response) = try await session.data(from: manifestURL)
 			guard let httpResponse = response as? HTTPURLResponse else { throw APIServerError(kind: .invalidHTTPResponse) }
 			guard httpResponse.statusSuccessful else { throw APIServerError(kind: .invalidHTTPResponse, errorCode: httpResponse.statusCode) }
@@ -115,7 +125,8 @@ public class API {
 				guard !payload.videos.isEmpty else { throw APIServerError(kind: .invalidData) }
 
 				// save the... JUST in case
-				videoUrls = payload.videos
+				videoUrls.send(payload.videos)
+				videoStatus.send(.success)
 
 				return payload.videos
 			} catch {

@@ -5,6 +5,7 @@
 //  Created by Colin Biggin on 2025-09-30.
 //
 
+import Combine
 import UIKit
 
 class ScrollingVC: UIViewController {
@@ -14,6 +15,7 @@ class ScrollingVC: UIViewController {
 
 	// MARK: private variables
 	private var videoUrls: [String] = []
+	private var subscriptions: [AnyCancellable] = []
 
 	// MARK: life-cycle
 	override func viewDidLoad() {
@@ -23,7 +25,8 @@ class ScrollingVC: UIViewController {
 		tableView.dataSource = self
 		tableView.isPagingEnabled = true
 
-		Task { await self.downloadVideos() }
+		setupSubscriptions()
+		Services.downloadVideos()
 	}
 }
 
@@ -62,18 +65,23 @@ extension ScrollingVC: UITableViewDataSource {
 // MARK: IBActions
 extension ScrollingVC {
 
-	private func downloadVideos() async {
-		let api = API()
-		do {
-			let videos = try await api.downloadManifest("https://cdn.dev.airxp.app/AgentVideos-HLS-Progressive/manifest.json")
-			videoUrls = videos
-			redoTableView()
-		} catch {
-			print("Failed to download manifest: \(error)")
-		}
+	func setupSubscriptions() {
+
+		guard subscriptions.isEmpty else { return }
+
+		Services.api.videoUrls
+			.sink(
+				receiveCompletion: { _ in
+			}, receiveValue: {  [weak self] videos in
+				self?.videoUrls = videos
+				self?.redoTableView()
+			})
+			.store(in: &subscriptions)
 	}
 
 	private func redoTableView() {
-		tableView.reloadData()
+		DispatchQueue.main.async {
+			self.tableView.reloadData()
+		}
 	}
 }
