@@ -9,8 +9,10 @@ import UIKit
 
 class EditingVC: UIViewController {
 
+	// MARK: IBOutlets
 	@IBOutlet internal var primaryTextField: CBExpandingTextView!
 
+	// MARK: life-cycle
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
@@ -18,7 +20,7 @@ class EditingVC: UIViewController {
 		primaryTextField.layer.cornerRadius = 8
 		primaryTextField.layer.borderWidth = 1
 		primaryTextField.layer.borderColor = UIColor.systemGray.cgColor
-		primaryTextField.placeholderText = "TESTING"
+		primaryTextField.placeholderText = "Send message"
 	}
 }
 
