@@ -13,11 +13,14 @@ final class CBVideoCell: UITableViewCell {
 	// MARK: statics
 	static let reuseIdentifier = "CBVideoCell"
 
+	// MARK: settable variables
 	public var urlString: String = "" {
 		didSet {
 			configure(with: urlString)
 		}
 	}
+	public var autoPlay: Bool = true
+	public var loopVideo: Bool = true
 
 	private var player: AVPlayer?
 	private var playerLayer: AVPlayerLayer?
@@ -52,10 +55,20 @@ final class CBVideoCell: UITableViewCell {
 	}
 
 	private func cleanupPlayer() {
+		NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: player?.currentItem)
 		player?.pause()
 		playerLayer?.removeFromSuperlayer()
 		player = nil
 		playerLayer = nil
+
+		// make sure nothing being notified
+		NotificationCenter.default.removeObserver(self)
+	}
+
+	deinit {
+		player = nil
+		playerLayer = nil
+		NotificationCenter.default.removeObserver(self)
 	}
 
 	func configure(with urlString: String) {
@@ -78,9 +91,26 @@ final class CBVideoCell: UITableViewCell {
 		self.player = player
 		self.playerLayer = layer
 
-		player.play()
+		if autoPlay {
+			player.play()
+		}
 
+		// need to be notified if looping
+		if loopVideo {
+			player.actionAtItemEnd = .none
+			NotificationCenter.default.addObserver(self, selector: #selector(playerItemDidReachEnd(_:)), name: .AVPlayerItemDidPlayToEndTime, object: player.currentItem)
+		}
 		setNeedsLayout()
+	}
+
+	@objc private func playerItemDidReachEnd(_ notification: Notification) {
+		guard let player else { return }
+		guard loopVideo else { return }
+
+		player.seek(to: .zero)
+		if autoPlay {
+			player.play()
+		}
 	}
 }
 
