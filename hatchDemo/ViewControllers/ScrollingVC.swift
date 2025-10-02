@@ -24,7 +24,7 @@ class ScrollingVC: UIViewController {
 	private var videoUrls: [String] = []
 	private var subscriptions: [AnyCancellable] = []
 
-	private var currentVideos: [Int] = []
+	private var currentVideos: [String] = []
 	private var currentVideoIndex: Int = 0
 
 	// MARK: life-cycle
@@ -83,10 +83,15 @@ private extension ScrollingVC {
 	func redoVideos() {
 		guard !videoUrls.isEmpty else { return }
 
+		// add 2 entries to our video list (ie, currentVideos)
+		currentVideos.append(videoUrls[Int.random(in: 0..<videoUrls.count)])
+		currentVideos.append(videoUrls[Int.random(in: 0..<videoUrls.count)])
+		guard currentVideos.count == 2 else { return }
+
 		// only need to set our 1st & 2nd videos
 		currentVideoIndex = 0
-		currentVideo?.urlString = videoUrls[0]
-		offscreenVideo?.urlString = videoUrls[1]
+		currentVideo?.urlString = currentVideos[0]
+		offscreenVideo?.urlString = currentVideos[1]
 	}
 
 	func updateLabels() {
@@ -100,12 +105,18 @@ private extension ScrollingVC {
 
 	@IBAction func scrollUp(_ sender: Any) {
 		guard currentVideoIndex < videoUrls.count - 1 else { return }
+		// check if we're at the very end and if so, add another... since we're INFINITE
+		if currentVideoIndex == currentVideos.count - 1 {
+			currentVideos.append(videoUrls[Int.random(in: 0..<videoUrls.count)])
+		}
+
+		guard currentVideoIndex < currentVideos.count - 1 else { return }
 
 		let nextIndex = currentVideoIndex + 1
-		guard nextIndex < videoUrls.count else { return }
+		guard nextIndex < currentVideos.count else { return }
 
 		// make our offscreen video the next one and then animate (scroll) up
-		offscreenVideo?.urlString = videoUrls[nextIndex]
+		offscreenVideo?.urlString = currentVideos[nextIndex]
 		offscreenVideo?.frame = bottomVideoFrame
 
 		UIView.animate(
@@ -130,7 +141,7 @@ private extension ScrollingVC {
 		let previousIndex = currentVideoIndex - 1
 
 		// make our offscreen video the next one and then animate (scroll) up
-		offscreenVideo?.urlString = videoUrls[previousIndex]
+		offscreenVideo?.urlString = currentVideos[previousIndex]
 		offscreenVideo?.frame = topVideoFrame
 
 		UIView.animate(
