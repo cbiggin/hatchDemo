@@ -96,8 +96,10 @@ private extension CBExpandingTextView {
 // MARK: - UITextViewDelegate methods
 extension CBExpandingTextView: UITextViewDelegate {
 	public func textViewDidBeginEditing(_ textView: UITextView) {
+		if textView.text == placeholderText {
+			text = ""
+		}
 		textColor = nonplaceholderTextColor
-		text = ""
 	}
 
 	public func textViewDidChange(_ textView: UITextView) {
