@@ -95,7 +95,7 @@ private extension ScrollingVC {
 	}
 
 	func updateLabels() {
-		indexLabel.text = "\(currentVideoIndex + 1)"
+		indexLabel.text = "\(currentVideoIndex + 1) of \(currentVideos.count)"
 		view.bringSubviewToFront(indexLabel)
 	}
 }
@@ -104,7 +104,6 @@ private extension ScrollingVC {
 private extension ScrollingVC {
 
 	@IBAction func scrollUp(_ sender: Any) {
-		guard currentVideoIndex < videoUrls.count - 1 else { return }
 		// check if we're at the very end and if so, add another... since we're INFINITE
 		if currentVideoIndex == currentVideos.count - 1 {
 			currentVideos.append(videoUrls[Int.random(in: 0..<videoUrls.count)])
