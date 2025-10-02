@@ -30,7 +30,31 @@ class ScrollingVC: UIViewController {
 	}
 }
 
-// MARK: UITableViewDelegate
+// MARK: - Private methods
+private extension ScrollingVC {
+
+	func setupSubscriptions() {
+
+		guard subscriptions.isEmpty else { return }
+
+		Services.api.videoUrls
+			.sink(
+				receiveCompletion: { _ in
+			}, receiveValue: {  [weak self] videos in
+				self?.videoUrls = videos
+				self?.redoTableView()
+			})
+			.store(in: &subscriptions)
+	}
+
+	func redoTableView() {
+		DispatchQueue.main.async {
+			self.tableView.reloadData()
+		}
+	}
+}
+
+// MARK: - UITableViewDelegate
 extension ScrollingVC: UITableViewDelegate {
 
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -40,7 +64,7 @@ extension ScrollingVC: UITableViewDelegate {
 	}
 }
 
-// MARK: UITableViewDataSource
+// MARK: - UITableViewDataSource
 extension ScrollingVC: UITableViewDataSource {
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		return videoUrls.count
@@ -59,29 +83,5 @@ extension ScrollingVC: UITableViewDataSource {
 
 		// always make it the height of tableview, ie, we want it to fill the screen
 		return tableView.frame.height
-	}
-}
-
-// MARK: IBActions
-extension ScrollingVC {
-
-	func setupSubscriptions() {
-
-		guard subscriptions.isEmpty else { return }
-
-		Services.api.videoUrls
-			.sink(
-				receiveCompletion: { _ in
-			}, receiveValue: {  [weak self] videos in
-				self?.videoUrls = videos
-				self?.redoTableView()
-			})
-			.store(in: &subscriptions)
-	}
-
-	private func redoTableView() {
-		DispatchQueue.main.async {
-			self.tableView.reloadData()
-		}
 	}
 }
