@@ -24,3 +24,9 @@ class EditingVC: UIViewController {
 	}
 }
 
+// MARK: IBActions
+extension EditingVC {
+	@IBAction func toggleDismissKeyboard(_ sender: Any) {
+		primaryTextField.resignFirstResponder()
+	}
+}

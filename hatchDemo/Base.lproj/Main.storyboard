@@ -71,10 +71,14 @@
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="O1n-1U-nqr"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="EFd-In-4Bu" firstAttribute="centerX" secondItem="gf5-Fz-TRU" secondAttribute="centerX" id="VqT-My-Ic1"/>
                             <constraint firstItem="EFd-In-4Bu" firstAttribute="centerY" secondItem="gf5-Fz-TRU" secondAttribute="centerY" id="yqW-oa-St4"/>
                         </constraints>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="ure-Z1-6FM" appends="YES" id="xHi-69-Xfo"/>
+                        </connections>
                     </view>
                     <tabBarItem key="tabBarItem" title="Editing" image="text.rectangle" catalog="system" id="Rac-i0-Hj4"/>
                     <connections>
@@ -82,6 +86,11 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fQh-92-sYn" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="ure-Z1-6FM">
+                    <connections>
+                        <action selector="toggleDismissKeyboard:" destination="eHK-xE-U8A" id="wvY-Xn-ON0"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="367" y="-309"/>
         </scene>
