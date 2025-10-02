@@ -15,37 +15,33 @@
                     <view key="view" contentMode="scaleToFill" id="Czw-2o-o0t">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="aQ0-cC-Hxr">
-                                <rect key="frame" x="0.0" y="118" width="393" height="617"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="CBVideoCell" rowHeight="136" id="5hC-8P-n2y" customClass="CBVideoCell" customModule="hatchDemo" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="50" width="393" height="136"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="5hC-8P-n2y" id="Ld8-5w-293">
-                                            <rect key="frame" x="0.0" y="0.0" width="393" height="136"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                </prototypes>
-                            </tableView>
-                        </subviews>
                         <viewLayoutGuide key="safeArea" id="RIV-KX-jY3"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="RIV-KX-jY3" firstAttribute="trailing" secondItem="aQ0-cC-Hxr" secondAttribute="trailing" id="Bzy-ow-2XP"/>
-                            <constraint firstItem="aQ0-cC-Hxr" firstAttribute="leading" secondItem="RIV-KX-jY3" secondAttribute="leading" id="Mmt-dN-3HN"/>
-                            <constraint firstItem="aQ0-cC-Hxr" firstAttribute="top" secondItem="RIV-KX-jY3" secondAttribute="top" id="wCa-yx-VKB"/>
-                            <constraint firstItem="RIV-KX-jY3" firstAttribute="bottom" secondItem="aQ0-cC-Hxr" secondAttribute="bottom" id="yKM-HT-3n6"/>
-                        </constraints>
+                        <gestureRecognizers/>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="05D-LM-y9n" appends="YES" id="CxP-ep-Bjt"/>
+                            <outletCollection property="gestureRecognizers" destination="RWK-oJ-8g5" appends="YES" id="mxT-8Z-ndO"/>
+                            <outletCollection property="gestureRecognizers" destination="Op5-B5-5jF" appends="YES" id="MkS-Jr-XKJ"/>
+                        </connections>
                     </view>
                     <tabBarItem key="tabBarItem" title="Scrolling" image="list.number" catalog="system" id="LT2-en-uDh"/>
-                    <connections>
-                        <outlet property="tableView" destination="aQ0-cC-Hxr" id="JBj-Fo-lzo"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cpO-sl-TOr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <swipeGestureRecognizer direction="up" id="05D-LM-y9n">
+                    <connections>
+                        <action selector="scrollUp:" destination="3ag-sm-wGw" id="Nvo-Wf-jDG"/>
+                    </connections>
+                </swipeGestureRecognizer>
+                <swipeGestureRecognizer direction="down" id="RWK-oJ-8g5">
+                    <connections>
+                        <action selector="scrollDown:" destination="3ag-sm-wGw" id="Ykg-5V-TxY"/>
+                    </connections>
+                </swipeGestureRecognizer>
+                <tapGestureRecognizer id="Op5-B5-5jF">
+                    <connections>
+                        <action selector="tapGesture:" destination="3ag-sm-wGw" id="ouq-ZE-YZM"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="365.64885496183206" y="297.88732394366201"/>
         </scene>

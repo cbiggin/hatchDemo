@@ -10,21 +10,25 @@ import UIKit
 
 class ScrollingVC: UIViewController {
 
-	// MARK: IBOutlets
-	@IBOutlet internal var tableView: UITableView!
+	// MARK: our various subviews & frames
+	internal var currentVideo: CBVideoView?
+	internal var offscreenVideo: CBVideoView?
+	internal var currentVideoFrame: CGRect = .zero
+	internal var topVideoFrame: CGRect = .zero
+	internal var bottomVideoFrame: CGRect = .zero
 
 	// MARK: private variables
 	private var videoUrls: [String] = []
 	private var subscriptions: [AnyCancellable] = []
 
+	private var currentVideos: [Int] = []
+	private var currentVideoIndex: Int = 0
+
 	// MARK: life-cycle
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
-		tableView.delegate = self
-		tableView.dataSource = self
-		tableView.isPagingEnabled = true
-
+		setupVideoViews()
 		setupSubscriptions()
 		Services.downloadVideos()
 	}
@@ -42,46 +46,94 @@ private extension ScrollingVC {
 				receiveCompletion: { _ in
 			}, receiveValue: {  [weak self] videos in
 				self?.videoUrls = videos
-				self?.redoTableView()
+				self?.redoVideos()
 			})
 			.store(in: &subscriptions)
 	}
 
-	func redoTableView() {
-		DispatchQueue.main.async {
-			self.tableView.reloadData()
-		}
+	func setupVideoViews() {
+		let viewSize = view.frame.size
+
+		// now create our views on top of one another
+		topVideoFrame = CGRect(x: 0, y: -viewSize.height, width: viewSize.width, height: viewSize.height)
+		currentVideoFrame = CGRect(x: 0, y: 0, width: viewSize.width, height: viewSize.height)
+		bottomVideoFrame = CGRect(x: 0, y: viewSize.height, width: viewSize.width, height: viewSize.height)
+
+		let currentVideoView = CBVideoView(frame: currentVideoFrame)
+		view.addSubview(currentVideoView)
+		currentVideo = currentVideoView
+
+		let bottomVideoView = CBVideoView(frame: bottomVideoFrame)
+		view.addSubview(bottomVideoView)
+		offscreenVideo = bottomVideoView
+	}
+
+	func redoVideos() {
+		guard !videoUrls.isEmpty else { return }
+
+		// only need to set our 1st & 2nd videos
+		currentVideoIndex = 0
+		currentVideo?.urlString = videoUrls[0]
+		offscreenVideo?.urlString = videoUrls[1]
 	}
 }
 
-// MARK: - UITableViewDelegate
-extension ScrollingVC: UITableViewDelegate {
+// MARK: - IBActions/Gestures
+private extension ScrollingVC {
 
-	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		guard let videoCell = tableView.cellForRow(at: indexPath) as? CBVideoCell else { return }
+	@IBAction func scrollUp(_ sender: Any) {
+		guard currentVideoIndex < videoUrls.count - 1 else { return }
 
-		videoCell.toggle()
+		let nextIndex = currentVideoIndex + 1
+		guard nextIndex < videoUrls.count else { return }
+
+		// make our offscreen video the next one and then animate (scroll) up
+		offscreenVideo?.urlString = videoUrls[nextIndex]
+		offscreenVideo?.frame = bottomVideoFrame
+
+		UIView.animate(
+			withDuration: 0.20,
+			animations: {
+				self.currentVideo?.frame = self.topVideoFrame
+				self.offscreenVideo?.frame = self.currentVideoFrame
+			},
+			completion: { _ in
+				self.currentVideoIndex = nextIndex
+				let tempVideo = self.currentVideo
+				self.currentVideo = self.offscreenVideo
+				self.offscreenVideo = tempVideo
+			}
+		)
+	}
+
+	@IBAction func scrollDown(_ sender: Any) {
+		guard currentVideoIndex > 0 else { return }
+
+		let previousIndex = currentVideoIndex - 1
+
+		// make our offscreen video the next one and then animate (scroll) up
+		offscreenVideo?.urlString = videoUrls[previousIndex]
+		offscreenVideo?.frame = topVideoFrame
+
+		UIView.animate(
+			withDuration: 0.20,
+			animations: {
+				self.currentVideo?.frame = self.bottomVideoFrame
+				self.offscreenVideo?.frame = self.currentVideoFrame
+			},
+			completion: { _ in
+				self.currentVideoIndex = previousIndex
+				let tempVideo = self.currentVideo
+				self.currentVideo = self.offscreenVideo
+				self.offscreenVideo = tempVideo
+			}
+		)
+	}
+
+	@IBAction func tapGesture(_ sender: Any) {
+		guard let currentVideo else { return }
+
+		currentVideo.toggle()
 	}
 }
 
-// MARK: - UITableViewDataSource
-extension ScrollingVC: UITableViewDataSource {
-	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return videoUrls.count
-	}
-
-	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
-		// dequeue it a re-assign it's url string
-		let cell = tableView.dequeueReusableCell(withIdentifier: CBVideoCell.reuseIdentifier, for: indexPath) as! CBVideoCell
-		cell.urlString = videoUrls[indexPath.row]
-
-		return cell
-	}
-
-	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-
-		// always make it the height of tableview, ie, we want it to fill the screen
-		return tableView.frame.height
-	}
-}
