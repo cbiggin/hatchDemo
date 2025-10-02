@@ -10,6 +10,9 @@ import UIKit
 
 class ScrollingVC: UIViewController {
 
+	// MARK: IBOutlets
+	@IBOutlet internal var indexLabel: UILabel!
+
 	// MARK: our various subviews & frames
 	internal var currentVideo: CBVideoView?
 	internal var offscreenVideo: CBVideoView?
@@ -28,6 +31,7 @@ class ScrollingVC: UIViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
+		setupControls()
 		setupVideoViews()
 		setupSubscriptions()
 		Services.downloadVideos()
@@ -47,8 +51,16 @@ private extension ScrollingVC {
 			}, receiveValue: {  [weak self] videos in
 				self?.videoUrls = videos
 				self?.redoVideos()
+				self?.updateLabels()
 			})
 			.store(in: &subscriptions)
+	}
+
+	func setupControls() {
+		// let's make out label somewhat nice
+		indexLabel.layer.cornerRadius = 8
+		indexLabel.clipsToBounds = true
+		indexLabel.backgroundColor = UIColor.systemBackground.withAlphaComponent(0.5)
 	}
 
 	func setupVideoViews() {
@@ -76,6 +88,11 @@ private extension ScrollingVC {
 		currentVideo?.urlString = videoUrls[0]
 		offscreenVideo?.urlString = videoUrls[1]
 	}
+
+	func updateLabels() {
+		indexLabel.text = "\(currentVideoIndex + 1)"
+		view.bringSubviewToFront(indexLabel)
+	}
 }
 
 // MARK: - IBActions/Gestures
@@ -102,6 +119,7 @@ private extension ScrollingVC {
 				let tempVideo = self.currentVideo
 				self.currentVideo = self.offscreenVideo
 				self.offscreenVideo = tempVideo
+				self.updateLabels()
 			}
 		)
 	}
@@ -126,6 +144,7 @@ private extension ScrollingVC {
 				let tempVideo = self.currentVideo
 				self.currentVideo = self.offscreenVideo
 				self.offscreenVideo = tempVideo
+				self.updateLabels()
 			}
 		)
 	}
